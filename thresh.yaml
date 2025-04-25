@@ -1,0 +1,231 @@
+crowdsource: "prolific"       # Use "prolific" or other crowdsource options here, "custom" for your own database setup
+database: 
+    type: firebase
+    project_id: [ts-metaeval-pilot]
+    url: https://ts-metaeval-pilot.firebaseio.com/
+    collection: thresh     # (default: thresh) The database to use, this must exist on the firestore
+    document: annotations   # (default: annotation) The document to use, this must exist on the firestore
+    field: annotation_set_1  # The document field to store annotations, we recommend changing this value between data collection runs
+
+font_size:
+  source: 16
+  target: 16
+
+interface_text:
+  typology:
+    source_label: "Original"
+    target_label: "Simplification"
+
+display:
+  - side-by-side
+  - text-side-by-side
+  - disable-lines
+
+# Fluency/Coherence effectiveness options
+fc_effectiveness_options: &fc_effectiveness_options
+  - name: unaffected
+    label: "Unaffected"
+  - name: harmful
+    label: "Harmful"
+
+# Simplicity effectiveness options
+simp_effectiveness_options: &simp_effectiveness_options
+  - name: unaffected
+    label: "Unaffected"
+  - name: effective
+    label: "Effective"
+  - name: ineffective
+    label: "Ineffective"
+  - name: harmful
+    label: "Harmful"
+
+# Reusable meaning loss/addition options
+information_loss_options: &information_loss_options
+  - name: none
+    label: "No information removed"
+  - name: minor
+    label: "Removed minor detail"
+  - name: major
+    label: "Removed core/essential information"
+
+information_addition_options: &information_addition_options
+  - name: none
+    label: "No new information added"
+  - name: clarification
+    label: "Added clarification or helpful context"
+  - name: unrelated_or_wrong
+    label: "Added unrelated or incorrect information"
+
+
+# Reusable edit category options
+edit_categories: &edit_categories
+  - name: lexical
+    label: "Lexical"
+  - name: syntactic
+    label: "Syntactic"
+  - name: discourse
+    label: "Discourse / Structural"
+  - name: informational
+    label: "Informational"
+  - name: style
+    label: "Style / Tone"
+  - name: other
+    label: "Other / Unclear"
+
+# Edits
+edits:
+  - name: omission
+    label: "Omission"
+    enable_input: true
+    type: multi_span
+    color: red
+    icon: fa-circle-minus
+    annotation:
+      - name: omission-category
+        label: "Edit Category"
+        question: "What kind of content or structure does this omission affect?"
+        options: *edit_categories
+
+      - name: omission-simplicity
+        label: "Simplicity"
+        question: "What effect did this edit have on simplicity?"
+        options: *simp_effectiveness_options
+
+      - name: omission-fluency
+        label: "Fluency & Coherence"
+        question: "What effect did this edit have on fluency or coherence?"
+        options: *fc_effectiveness_options
+      - name: omission-meaning-loss
+        label: "Information Removal"
+        question: "Did this edit remove any information from the original?"
+        options: *information_loss_options
+      # - name: omission-meaning-addition
+      #   label: "Information Addition"
+      #   question: "Did this edit add any new information to the text?"
+      #   options: *information_addition_options
+
+  - name: insertion
+    label: "Insertion"
+    enable_output: true
+    type: multi_span
+    color: orange
+    icon: fa-flask
+    annotation:
+      - name: insertion-category
+        label: "Edit Category"
+        question: "What kind of content or structure does this insertion affect?"
+        options: *edit_categories
+      - name: insertion-simplicity
+        label: "Simplicity"
+        question: "What effect did this edit have on simplicity?"
+        options: *simp_effectiveness_options
+      - name: insertion-fluency
+        label: "Fluency & Coherence"
+        question: "What effect did this edit have on fluency or coherence?"
+        options: *fc_effectiveness_options
+      # - name: insertion-meaning-loss
+      #   label: "Information Removal"
+      #   question: "Did this edit remove any information from the original?"
+      #   options: *information_loss_options
+      - name: insertion-meaning-addition
+        label: "Information Addition"
+        question: "Did this edit add any new information to the text?"
+        options: *information_addition_options
+
+  - name: substitution
+    label: "Substitution"
+    enable_input: true
+    enable_output: true
+    type: multi_span
+    color: blue
+    icon: fa-sort
+    annotation:
+      - name: substitution-category
+        label: "Edit Category"
+        question: "What kind of content or structure does this substitution affect?"
+        options: *edit_categories
+      - name: substitution-simplicity
+        label: "Simplicity"
+        question: "What effect did this edit have on simplicity?"
+        options: *simp_effectiveness_options
+      - name: substitution-fluency
+        label: "Fluency & Coherence"
+        question: "What effect did this edit have on fluency or coherence?"
+        options: *fc_effectiveness_options
+      - name: substitution-meaning-loss
+        label: "Information Removal"
+        question: "Did this edit remove any information from the original?"
+        options: *information_loss_options
+      - name: substitution-meaning-addition
+        label: "Information Addition"
+        question: "Did this edit add any new information to the text?"
+        options: *information_addition_options
+  
+  - name: missed_opportunities
+    label: "Missed Opportunities"
+    enable_input: true
+    # enable_output: true
+    type: multi_span
+    color: purple
+    icon: fa-rectangle-xmark
+    annotation:
+      - name: mo-category
+        label: "Edit Category"
+        question: "What kind of content or structure does this affect?"
+        options: *edit_categories
+      - name: mo-simplicity
+        label: "Simplicity"
+        question: "What effect did this edit have on simplicity?"
+        options: *simp_effectiveness_options
+      - name: mo-fluency
+        label: "Fluency & Coherence"
+        question: "What effect did this edit have on fluency or coherence?"
+        options: *fc_effectiveness_options
+      - name: mo-meaning-loss
+        label: "Information Removal"
+        question: "Did this edit remove any information from the original?"
+        options: *information_loss_options
+      - name: mo-meaning-addition
+        label: "Information Addition"
+        question: "Did this edit add any new information to the text?"
+        options: *information_addition_options
+  
+  - name: reorder
+    label: "Reorder"
+    enable_input: true
+    enable_output: true
+    type: multi_span
+    color: teal
+    icon: fa-arrows-left-right
+    annotation:
+      - name: reorder-category
+        label: "Edit Category"
+        question: "What kind of content or structure does this reorder affect?"
+        options: *edit_categories
+      - name: reorder-simplicity
+        label: "Simplicity"
+        question: "What effect did this edit have on simplicity?"
+        options: *simp_effectiveness_options
+      - name: reorder-fluency
+        label: "Fluency & Coherence"
+        question: "What effect did this edit have on fluency or coherence?"
+        options: *fc_effectiveness_options
+      - name: reorder-meaning-loss
+        label: "Information Removal"
+        question: "Did this edit remove any information from the original?"
+        options: *information_loss_options
+      - name: reorder-meaning-addition
+        label: "Information Addition"
+        question: "Did this edit add any new information to the text?"
+        options: *information_addition_options
+
+  - name: comment
+    label: "Comment"
+    color: gray
+    icon: fa-ellipsis
+    annotation:
+      - name: comment_text
+        label: "Comment"
+        question: "Any remarks regarding the annotation of this sample?"
+        options: textarea
+        # required: true

@@ -1,4 +1,10 @@
+# --------------integration wtih crowdsourcing tools------------------
 crowdsource: "prolific"       # Use "prolific" or other crowdsource options here, "custom" for your own database setup
+prolific_completion_code: "THRESH_001"
+disable:
+- upload
+- download
+# --------------------------------
 database: 
     type: firebase
     project_id: [ts-metaeval-pilot]
@@ -6,6 +12,10 @@ database:
     collection: thresh     # (default: thresh) The database to use, this must exist on the firestore
     document: annotations   # (default: annotation) The document to use, this must exist on the firestore
     field: annotation_set_1  # The document field to store annotations, we recommend changing this value between data collection runs
+
+# --------------------------------
+template_name: demo
+template_label: Crowdsourcing Demo
 
 font_size:
   source: 16

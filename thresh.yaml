@@ -7,7 +7,7 @@ disable:
 # --------------------------------
 database: 
     type: firebase
-    project_id: [ts-metaeval-pilot]
+    project_id: ts-metaeval-pilot
     url: https://ts-metaeval-pilot.firebaseio.com/
     collection: thresh     # (default: thresh) The database to use, this must exist on the firestore
     document: annotations   # (default: annotation) The document to use, this must exist on the firestore

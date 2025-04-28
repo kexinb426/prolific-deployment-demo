@@ -40,14 +40,17 @@ fc_effectiveness_options: &fc_effectiveness_options
 
 # Simplicity effectiveness options
 simp_effectiveness_options: &simp_effectiveness_options
-  - name: unaffected
-    label: "Unaffected"
-  - name: effective
-    label: "Effective"
-  - name: ineffective
-    label: "Ineffective"
-  - name: harmful
-    label: "Harmful"
+  - name: much_simpler
+    label: "Much Simpler"
+  - name: simpler
+    label: "Simpler"
+  - name: no_change
+    label: "No Change"
+  - name: more_complex
+    label: "More Complex"
+  - name: much_more_complex
+    label: "Much More Complex"
+
 
 # Reusable meaning loss/addition options
 information_loss_options: &information_loss_options
@@ -64,7 +67,16 @@ information_addition_options: &information_addition_options
   - name: clarification
     label: "Added clarification or helpful context"
   - name: unrelated_or_wrong
-    label: "Added unrelated or incorrect information"
+    label: "Added unrelated or incorrect information" # verification on the annotators' end?
+    # information uninferrable from the source -> then it wouldn't be new info would it...
+
+meaning_distortion_options: &meaning_distortion_options
+  - name: none
+    label: "No distortion"
+  - name: minor_shift
+    label: "Minor shift in meaning"
+  - name: major_distortion
+    label: "Major distortion of meaning"
 
 
 # Reusable edit category options
@@ -105,6 +117,11 @@ edits:
         label: "Fluency & Coherence"
         question: "What effect did this edit have on fluency or coherence?"
         options: *fc_effectiveness_options
+      
+      - name: omission-meaning-distortion
+        label: "Meaning Distortion"
+        question: "Did this edit distort or change the original meaning of the text?"
+        options: *meaning_distortion_options
       - name: omission-meaning-loss
         label: "Information Removal"
         question: "Did this edit remove any information from the original?"
@@ -133,6 +150,10 @@ edits:
         label: "Fluency & Coherence"
         question: "What effect did this edit have on fluency or coherence?"
         options: *fc_effectiveness_options
+      - name: insertion-meaning-distortion
+        label: "Meaning Distortion"
+        question: "Did this edit distort or change the original meaning of the text?"
+        options: *meaning_distortion_options
       # - name: insertion-meaning-loss
       #   label: "Information Removal"
       #   question: "Did this edit remove any information from the original?"
@@ -162,6 +183,10 @@ edits:
         label: "Fluency & Coherence"
         question: "What effect did this edit have on fluency or coherence?"
         options: *fc_effectiveness_options
+      - name: substitution-meaning-distortion
+        label: "Meaning Distortion"
+        question: "Did this edit distort or change the original meaning of the text?"
+        options: *meaning_distortion_options
       - name: substitution-meaning-loss
         label: "Information Removal"
         question: "Did this edit remove any information from the original?"
@@ -191,14 +216,14 @@ edits:
         label: "Fluency & Coherence"
         question: "What effect did this edit have on fluency or coherence?"
         options: *fc_effectiveness_options
-      - name: mo-meaning-loss
-        label: "Information Removal"
-        question: "Did this edit remove any information from the original?"
-        options: *information_loss_options
-      - name: mo-meaning-addition
-        label: "Information Addition"
-        question: "Did this edit add any new information to the text?"
-        options: *information_addition_options
+      # - name: mo-meaning-loss
+      #   label: "Information Removal"
+      #   question: "Did this edit remove any information from the original?"
+      #   options: *information_loss_options
+      # - name: mo-meaning-addition
+      #   label: "Information Addition"
+      #   question: "Did this edit add any new information to the text?"
+      #   options: *information_addition_options
   
   - name: reorder
     label: "Reorder"
@@ -220,6 +245,10 @@ edits:
         label: "Fluency & Coherence"
         question: "What effect did this edit have on fluency or coherence?"
         options: *fc_effectiveness_options
+      - name: reorder-meaning-distortion
+        label: "Meaning Distortion"
+        question: "Did this edit distort or change the original meaning of the text?"
+        options: *meaning_distortion_options
       - name: reorder-meaning-loss
         label: "Information Removal"
         question: "Did this edit remove any information from the original?"
@@ -239,3 +268,39 @@ edits:
         question: "Any remarks regarding the annotation of this sample?"
         options: textarea
         # required: true
+  
+  # - name: document-fluency
+  #   label: "Document Fluency & Coherence"
+  #   question: "Does the simplified document read smoothly as a whole?"
+  #   options:
+  #     - excellent
+  #     - good
+  #     - acceptable
+  #     - poor
+
+  # - name: document-simplicity
+  #   label: "reader-familarity"
+  #   question: "How familiar are you with this topic?"
+  #   options:
+  #     - excellent
+  #     - good
+  #     - acceptable
+  #     - poor
+
+  # - name: document-meaning
+  #   label: "Meaning Preservation (Document Level)"
+  #   question: "Were the essential ideas of the original preserved across the full document?"
+  #   options:
+  #     - fully_preserved
+  #     - mostly_preserved
+  #     - partially_preserved
+  #     - major_loss
+
+  # - name: document-structure
+  #   label: "Structural Changes"
+  #   question: "Were there major changes to paragraph structure, topic organization, or flow?"
+  #   options:
+  #     - no_major_changes
+  #     - minor_changes
+  #     - major_changes
+

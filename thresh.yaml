@@ -31,52 +31,93 @@ display:
   - text-side-by-side
   - disable-lines
 
-# Fluency/Coherence effectiveness options
-fc_effectiveness_options: &fc_effectiveness_options
-  - name: unaffected
-    label: "Unaffected"
-  - name: harmful
-    label: "Harmful"
+# ------------------------------- Reusable chunks -----------------------------------------------------------------------------
 
 # Simplicity effectiveness options
-simp_effectiveness_options: &simp_effectiveness_options
-  - name: much_simpler
-    label: "Much Simpler"
-  - name: simpler
-    label: "Simpler"
-  - name: no_change
-    label: "No Change"
+simplicity_scale: &simplicity_scale
   - name: more_complex
     label: "More Complex"
-  - name: much_more_complex
-    label: "Much More Complex"
+  - name: ineffective
+    label: "No Real Difference"
+  - name: simpler
+    label: "Simpler"
+  # - name: much_simpler
+  #   label: "Much Simpler"
+  - name: NA
+    label: "Not Targeted"
 
 
-# Reusable meaning loss/addition options
-information_loss_options: &information_loss_options
-  - name: none
-    label: "No information removed"
-  - name: minor
-    label: "Removed minor detail"
-  - name: major
-    label: "Removed core/essential information"
 
-information_addition_options: &information_addition_options
-  - name: none
-    label: "No new information added"
+# info addition options
+info_addition_accuracy: &info_addition_accuracy
+  - name: accurate
+    label: "Accurate"
+  - name: unverifiable
+    label: "Unverifiable"
+  - name: incorrect
+    label: "Incorrect or Contradictory"
+
+
+info_addition_helpfulness: &info_addition_helpfulness
+  - name: unhelpful
+    label: "-1 Confusing or Unhelpful"
+    question: "Is the added information accurate and grounded?"
+    options: *info_addition_accuracy
+  - name: neutral
+    label: "0 Neutral"
+    question: "Is the added information accurate and grounded?"
+    options: *info_addition_accuracy
+  - name: somewhat_helpful
+    label: "+1 Somewhat helpful"
+    question: "Is the added information accurate and grounded?"
+    options: *info_addition_accuracy
+  - name: very_helpful
+    label: "+2 Very helpful"
+    question: "Is the added information accurate and grounded?"
+    options: *info_addition_accuracy
+  
+
+    
+info_addition_types: &info_addition_types
   - name: clarification
-    label: "Added clarification or helpful context"
-  - name: unrelated_or_wrong
-    label: "Added unrelated or incorrect information" # verification on the annotators' end?
-    # information uninferrable from the source -> then it wouldn't be new info would it...
+    label: "Definition or Clarification"
+    question: "How helpful is the added content for understanding the original?"
+    options: *info_addition_helpfulness
 
+  - name: example
+    label: "Example or Illustration"
+    question: "How helpful is the added content for understanding the original?"
+    options: *info_addition_helpfulness
+
+  - name: overview
+    label: "Overview or Preview"
+    question: "How helpful is the added content for understanding the original?"
+    options: *info_addition_helpfulness
+
+  - name: discourse_marker
+    label: "Discourse / Structural Marker"
+    question: "How helpful is the added content for understanding the original?"
+    options: *info_addition_helpfulness
+
+  - name: evaluative
+    label: "Interpretive or Evaluative Comment"
+    question: "How helpful is the added content for understanding the original?"
+    options: *info_addition_helpfulness
+
+  - name: other
+    label: "Other (Describe in Comment)"
+    question: "How helpful is the added content for understanding the original?"
+    options: *info_addition_helpfulness
+
+
+# info distortion options
 meaning_distortion_options: &meaning_distortion_options
   - name: none
-    label: "No distortion"
-  - name: minor_shift
-    label: "Minor shift in meaning"
-  - name: major_distortion
-    label: "Major distortion of meaning"
+    label: "None"
+  - name: minor_deviation
+    label: "Details/Nuance"
+  - name: major_deviation
+    label: "Factual/Major"
 
 
 # Reusable edit category options
@@ -94,8 +135,56 @@ edit_categories: &edit_categories
   - name: other
     label: "Other / Unclear"
 
-# Edits
+
+
+
+# ================================================== Edits ===================================================
 edits:
+  - name: simplified_flag
+    label: "Simplified Only"
+    enable_output: true
+    type: multi_span
+    color: yellow
+    icon: fa-exclamation
+    annotation:
+      - name: issue_type
+        question: "What is the main issue with this span in the simplified text?"
+        options:
+          - name: unnatural
+            label: "Unnatural"
+          - name: repetitive
+            label: "Repetitive"
+          - name: vague
+            label: "Vague"
+          - name: unclear
+            label: "Unclear"
+          - name: disjointed
+            label: "Disjointed"
+          - name: illogical
+            label: "Illogical"
+          - name: incorrect
+            label: "Incorrect"
+          - name: other
+            label: "Other"
+
+      - name: severity
+        label: "Severity"
+        question: "How serious is the issue?"
+        options:
+          - name: minor
+            label: "1 - Minor"
+          - name: moderate
+            label: "2 - Noticeable"
+          - name: severe
+            label: "3 - Disrupts understanding"
+          
+
+      - name: simplified_flag_comment
+        label: "Comment (Optional)"
+        question: "Any brief remarks about this span?"
+        options: textarea
+
+# --------------------------
   - name: omission
     label: "Omission"
     enable_input: true
@@ -103,66 +192,56 @@ edits:
     color: red
     icon: fa-circle-minus
     annotation:
-      - name: omission-category
-        label: "Edit Category"
-        question: "What kind of content or structure does this omission affect?"
-        options: *edit_categories
+      - name: omission_vocab_simplicity
+        question: "Does it remove or replace hard words with simpler ones?"
+        options: *simplicity_scale
+      - name: omission_syntax_simplicity
+        question: "Does it simplify the sentence structure?"
+        options: *simplicity_scale
+      - name: omission_organization_simplicity
+        question: "Does it improve the flow or logical structure of the sentence?"
+        options: *simplicity_scale
+      - name: omission_style_simplicity
+        question: "Does it make the tone sound more natural or conversational?"
+        options: *simplicity_scale
 
-      - name: omission-simplicity
-        label: "Simplicity"
-        question: "What effect did this edit have on simplicity?"
-        options: *simp_effectiveness_options
-
-      - name: omission-fluency
-        label: "Fluency & Coherence"
-        question: "What effect did this edit have on fluency or coherence?"
-        options: *fc_effectiveness_options
-      
-      - name: omission-meaning-distortion
-        label: "Meaning Distortion"
-        question: "Did this edit distort or change the original meaning of the text?"
+      - name: omission_faithfulness
+        label: "Faithfulness to Original"
+        question: "How much information was lost or changed?"
         options: *meaning_distortion_options
-      - name: omission-meaning-loss
-        label: "Information Removal"
-        question: "Did this edit remove any information from the original?"
-        options: *information_loss_options
-      # - name: omission-meaning-addition
-      #   label: "Information Addition"
-      #   question: "Did this edit add any new information to the text?"
-      #   options: *information_addition_options
 
+# --------------------------
   - name: insertion
     label: "Insertion"
     enable_output: true
     type: multi_span
-    color: orange
+    color: green
     icon: fa-flask
     annotation:
-      - name: insertion-category
-        label: "Edit Category"
-        question: "What kind of content or structure does this insertion affect?"
-        options: *edit_categories
-      - name: insertion-simplicity
-        label: "Simplicity"
-        question: "What effect did this edit have on simplicity?"
-        options: *simp_effectiveness_options
-      - name: insertion-fluency
-        label: "Fluency & Coherence"
-        question: "What effect did this edit have on fluency or coherence?"
-        options: *fc_effectiveness_options
-      - name: insertion-meaning-distortion
-        label: "Meaning Distortion"
-        question: "Did this edit distort or change the original meaning of the text?"
-        options: *meaning_distortion_options
-      # - name: insertion-meaning-loss
-      #   label: "Information Removal"
-      #   question: "Did this edit remove any information from the original?"
-      #   options: *information_loss_options
-      - name: insertion-meaning-addition
-        label: "Information Addition"
-        question: "Did this edit add any new information to the text?"
-        options: *information_addition_options
+      - name: insertion_vocab_simplicity
+        question: "Does it remove or replace hard words with simpler ones?"
+        options: *simplicity_scale
+      - name: insertion_syntax_simplicity
+        question: "Does it simplify the sentence structure?"
+        options: *simplicity_scale
+      - name: insertion_organization_simplicity
+        question: "Does it improve the flow or logical structure of the sentence?"
+        options: *simplicity_scale
+      - name: insertion_style_simplicity
+        question: "Does it make the tone sound more natural or conversational?"
+        options: *simplicity_scale
+      - name: new_info_added
+        label: "New Information"
+        question: "Does it introduce genuinely new information not stated or implied anywhere in the original?"
+        options:
+          - name: no_new_info
+            label: "No"
+          - name: new_info_present
+            label: "Yes"
+            question: "What type of new information was added?"
+            options: *info_addition_types
 
+# --------------------------
   - name: substitution
     label: "Substitution"
     enable_input: true
@@ -171,136 +250,72 @@ edits:
     color: blue
     icon: fa-sort
     annotation:
-      - name: substitution-category
-        label: "Edit Category"
-        question: "What kind of content or structure does this substitution affect?"
-        options: *edit_categories
-      - name: substitution-simplicity
-        label: "Simplicity"
-        question: "What effect did this edit have on simplicity?"
-        options: *simp_effectiveness_options
-      - name: substitution-fluency
-        label: "Fluency & Coherence"
-        question: "What effect did this edit have on fluency or coherence?"
-        options: *fc_effectiveness_options
-      - name: substitution-meaning-distortion
-        label: "Meaning Distortion"
-        question: "Did this edit distort or change the original meaning of the text?"
+      - name: substitution_vocab_simplicity
+        question: "Does it remove or replace hard words with simpler ones?"
+        options: *simplicity_scale
+      - name: substitution_syntax_simplicity
+        question: "Does it simplify the sentence structure?"
+        options: *simplicity_scale
+      - name: substitution_organization_simplicity
+        question: "Does it improve the flow or logical structure of the sentence?"
+        options: *simplicity_scale
+      - name: substitution_style_simplicity
+        question: "Does it make the tone sound more natural or conversational?"
+        options: *simplicity_scale
+      
+      - name: substitution_faithfulness
+        label: "Faithfulness to Original"
+        question: "How much information was lost or changed?"
         options: *meaning_distortion_options
-      - name: substitution-meaning-loss
-        label: "Information Removal"
-        question: "Did this edit remove any information from the original?"
-        options: *information_loss_options
-      - name: substitution-meaning-addition
-        label: "Information Addition"
-        question: "Did this edit add any new information to the text?"
-        options: *information_addition_options
-  
-  - name: missed_opportunities
-    label: "Missed Opportunities"
-    enable_input: true
-    # enable_output: true
-    type: multi_span
-    color: purple
-    icon: fa-rectangle-xmark
-    annotation:
-      - name: mo-category
-        label: "Edit Category"
-        question: "What kind of content or structure does this affect?"
-        options: *edit_categories
-      - name: mo-simplicity
-        label: "Simplicity"
-        question: "What effect did this edit have on simplicity?"
-        options: *simp_effectiveness_options
-      - name: mo-fluency
-        label: "Fluency & Coherence"
-        question: "What effect did this edit have on fluency or coherence?"
-        options: *fc_effectiveness_options
-      # - name: mo-meaning-loss
-      #   label: "Information Removal"
-      #   question: "Did this edit remove any information from the original?"
-      #   options: *information_loss_options
-      # - name: mo-meaning-addition
-      #   label: "Information Addition"
-      #   question: "Did this edit add any new information to the text?"
-      #   options: *information_addition_options
-  
-  - name: reorder
-    label: "Reorder"
+
+      - name: new_info_added
+        label: "New Information"
+        question: "Does it introduce genuinely new information not stated or implied anywhere in the original?"
+        options:
+          - name: no_new_info
+            label: "No"
+          - name: new_info_present
+            label: "Yes"
+            question: "What type of new information was added?"
+            options: *info_addition_types
+
+# --------------------------
+  - name: structure
+    label: "Structure"
     enable_input: true
     enable_output: true
     type: multi_span
-    color: teal
-    icon: fa-arrows-left-right
+    color: orange
+    icon: fa-align-justify
     annotation:
-      - name: reorder-category
-        label: "Edit Category"
-        question: "What kind of content or structure does this reorder affect?"
-        options: *edit_categories
-      - name: reorder-simplicity
-        label: "Simplicity"
-        question: "What effect did this edit have on simplicity?"
-        options: *simp_effectiveness_options
-      - name: reorder-fluency
-        label: "Fluency & Coherence"
-        question: "What effect did this edit have on fluency or coherence?"
-        options: *fc_effectiveness_options
-      - name: reorder-meaning-distortion
-        label: "Meaning Distortion"
-        question: "Did this edit distort or change the original meaning of the text?"
-        options: *meaning_distortion_options
-      - name: reorder-meaning-loss
-        label: "Information Removal"
-        question: "Did this edit remove any information from the original?"
-        options: *information_loss_options
-      - name: reorder-meaning-addition
-        label: "Information Addition"
-        question: "Did this edit add any new information to the text?"
-        options: *information_addition_options
+    - name: structure_vocab_simplicity
+      question: "Did this edit simplify the vocabulary (e.g., removing complex, rare, or abstract words)?"
+      options: *simplicity_scale
 
-  - name: comment
-    label: "Comment"
-    color: gray
-    icon: fa-ellipsis
-    annotation:
-      - name: comment_text
-        label: "Comment"
-        question: "Any remarks regarding the annotation of this sample?"
-        options: textarea
-        # required: true
-  
-  # - name: document-fluency
-  #   label: "Document Fluency & Coherence"
-  #   question: "Does the simplified document read smoothly as a whole?"
-  #   options:
-  #     - excellent
-  #     - good
-  #     - acceptable
-  #     - poor
+    - name: structure_syntax_simplicity
+      question: "Did this edit simplify the sentence structure (e.g., shorter sentence, fewer clauses)?"
+      options: *simplicity_scale
 
-  # - name: document-simplicity
-  #   label: "reader-familarity"
-  #   question: "How familiar are you with this topic?"
-  #   options:
-  #     - excellent
-  #     - good
-  #     - acceptable
-  #     - poor
+    - name: structure_organization_simplicity
+      question: "Did this edit improve the flow or logical structure of the sentence?"
+      options: *simplicity_scale
 
-  # - name: document-meaning
-  #   label: "Meaning Preservation (Document Level)"
-  #   question: "Were the essential ideas of the original preserved across the full document?"
-  #   options:
-  #     - fully_preserved
-  #     - mostly_preserved
-  #     - partially_preserved
-  #     - major_loss
+    - name: structure_style_simplicity
+      question: "Did this edit make the tone or style more direct, conversational, or accessible?"
+      options: *simplicity_scale
 
-  # - name: document-structure
-  #   label: "Structural Changes"
-  #   question: "Were there major changes to paragraph structure, topic organization, or flow?"
-  #   options:
-  #     - no_major_changes
-  #     - minor_changes
-  #     - major_changes
+    - name: structure_faithfulness
+      label: "Faithfulness to Original"
+      question: "How much information was lost or changed due to this edit?"
+      options: *meaning_distortion_options
 
+    - name: new_info_added
+      label: "New Information"
+      question: "Does this edit introduce genuinely new information not stated or implied anywhere in the original?"
+      options:
+        - name: no_new_info
+          label: "No"
+        - name: new_info_present
+          label: "Yes"
+          question: "What type of new information was added?"
+          options: *info_addition_types

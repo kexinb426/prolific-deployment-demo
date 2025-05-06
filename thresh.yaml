@@ -282,7 +282,6 @@ edits:
 # --------------------------
   - name: structure
     label: "Structure"
-    enable_input: true
     enable_output: true
     type: multi_span
     color: orange

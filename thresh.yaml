@@ -1,6 +1,6 @@
 # --------------integration wtih crowdsourcing tools------------------
-crowdsource: "prolific"       # Use "prolific" or other crowdsource options here, "custom" for your own database setup
-prolific_completion_code: THRESH_001
+crowdsource: "prolific" 
+prolific_completion_code: TS_EVAL
 disable:
 - upload
 # - download
@@ -35,107 +35,117 @@ display:
 
 # Simplicity effectiveness options
 simplicity_scale: &simplicity_scale
-  - name: more_complex
-    label: "More Complex"
+  - name: harder
+    label: "Harder"
   - name: ineffective
     label: "No Real Difference"
-  - name: simpler
-    label: "Simpler"
-  # - name: much_simpler
-  #   label: "Much Simpler"
-  - name: NA
-    label: "Not Targeted"
+  - name: easier
+    label: "Easier"
+  - name: much-easier
+    label: "Significantly Easier"
 
 
 
 # info addition options
 info_addition_accuracy: &info_addition_accuracy
+  - name: non-factual
+    label: "No (Non-factual)"
   - name: accurate
-    label: "Accurate"
-  - name: unverifiable
-    label: "Unverifiable"
-  - name: incorrect
-    label: "Incorrect or Contradictory"
+    label: "No (Accurate)"
+  - name: unclear
+    label: "Unclear"
+  - name: yes
+    label: "Yes"
 
 
-info_addition_helpfulness: &info_addition_helpfulness
-  - name: unhelpful
-    label: "-1 Confusing or Unhelpful"
-    question: "Is the added information accurate and grounded?"
-    options: *info_addition_accuracy
-  - name: neutral
-    label: "0 Neutral"
-    question: "Is the added information accurate and grounded?"
-    options: *info_addition_accuracy
-  - name: somewhat_helpful
-    label: "+1 Somewhat helpful"
-    question: "Is the added information accurate and grounded?"
-    options: *info_addition_accuracy
-  - name: very_helpful
-    label: "+2 Very helpful"
-    question: "Is the added information accurate and grounded?"
-    options: *info_addition_accuracy
+# info_addition_helpfulness: &info_addition_helpfulness
+#   - name: unhelpful
+#     label: "-1 Confusing or Unhelpful"
+#     question: "Is the added information accurate and grounded?"
+#     options: *info_addition_accuracy
+#   - name: neutral
+#     label: "0 Neutral"
+#     question: "Is the added information accurate and grounded?"
+#     options: *info_addition_accuracy
+#   - name: somewhat_helpful
+#     label: "+1 Somewhat helpful"
+#     question: "Is the added information accurate and grounded?"
+#     options: *info_addition_accuracy
+#   - name: very_helpful
+#     label: "+2 Very helpful"
+#     question: "Is the added information accurate and grounded?"
+#     options: *info_addition_accuracy
   
 
     
 info_addition_types: &info_addition_types
-  - name: clarification
-    label: "Definition or Clarification"
-    question: "How helpful is the added content for understanding the original?"
-    options: *info_addition_helpfulness
+  - name: explanation
+    label: "Definition・Explanation"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
 
   - name: example
-    label: "Example or Illustration"
-    question: "How helpful is the added content for understanding the original?"
-    options: *info_addition_helpfulness
+    label: "Example・Illustration"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
+  
+  - name: narrowing
+    label: "Disambiguation・Narrowing"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
 
   - name: overview
-    label: "Overview or Preview"
-    question: "How helpful is the added content for understanding the original?"
-    options: *info_addition_helpfulness
+    label: "Overview・Summary"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
 
-  - name: discourse_marker
-    label: "Discourse / Structural Marker"
-    question: "How helpful is the added content for understanding the original?"
-    options: *info_addition_helpfulness
+  - name: discourse
+    label: "Discourse・Structural Marker"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
+
+  - name: structural
+    label: "Structural Marker"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
 
   - name: evaluative
-    label: "Interpretive or Evaluative Comment"
-    question: "How helpful is the added content for understanding the original?"
-    options: *info_addition_helpfulness
+    label: "Evaluation・Comment"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
 
   - name: other
-    label: "Other (Describe in Comment)"
-    question: "How helpful is the added content for understanding the original?"
-    options: *info_addition_helpfulness
+    label: "Other (Comment)"
+    question: "Does the added content introduce a factual error?"
+    options: *info_addition_accuracy
 
 
 # info distortion options
 meaning_distortion_options: &meaning_distortion_options
-  - name: none
-    label: "None"
-  - name: minor_deviation
-    label: "Details/Nuance"
-  - name: major_deviation
-    label: "Factual/Major"
+  - name: preserved
+    label: "Preserved"
+  - name: partial
+    label: "Partially Preserved"
+  - name: changed
+    label: "Meaning Changed"
 
 
 # Reusable edit category options
 edit_categories: &edit_categories
   - name: lexical
-    label: "Lexical"
+    label: "Vocabulary"
   - name: syntactic
-    label: "Syntactic"
+    label: "Grammar"
   - name: discourse
-    label: "Discourse / Structural"
-  - name: informational
-    label: "Informational"
+    label: "Organization・Flow"
+  - name: information
+    label: "Information"
   - name: style
-    label: "Style / Tone"
+    label: "Style・Tone"
+  - name: multiple
+    label: "Multiple (Comment)"
   - name: other
-    label: "Other / Unclear"
-
-
+    label: "Other (Comment)"
 
 
 # ================================================== Edits ===================================================
@@ -156,8 +166,8 @@ edits:
             label: "Repetitive"
           - name: vague
             label: "Vague"
-          - name: unclear
-            label: "Unclear"
+          - name: difficult
+            label: "Difficult"
           - name: disjointed
             label: "Disjointed"
           - name: illogical
@@ -174,14 +184,14 @@ edits:
           - name: minor
             label: "1 - Minor"
           - name: moderate
-            label: "2 - Noticeable"
+            label: "2 - Moderate"
           - name: severe
-            label: "3 - Disrupts understanding"
+            label: "3 - Major"
           
 
       - name: simplified_flag_comment
         label: "Comment (Optional)"
-        question: "Any brief remarks about this span?"
+        question: "Any brief remarks about this span (Type NA if none)?"
         options: textarea
 
 # --------------------------
@@ -192,23 +202,25 @@ edits:
     color: red
     icon: fa-circle-minus
     annotation:
-      - name: omission_vocab_simplicity
-        question: "Does it remove or replace hard words with simpler ones?"
-        options: *simplicity_scale
-      - name: omission_syntax_simplicity
-        question: "Does it simplify the sentence structure?"
-        options: *simplicity_scale
-      - name: omission_organization_simplicity
-        question: "Does it improve the flow or logical structure of the sentence?"
-        options: *simplicity_scale
-      - name: omission_style_simplicity
-        question: "Does it make the tone sound more natural or conversational?"
+      - name: omission-category
+        label: "Edit Category"
+        question: "What aspect does this change affect the most?"
+        options: *edit_categories
+
+      - name: omission-simplicity
+        label: "Simplicity"
+        question: "How did the change affect the sentence's readability and simplicity?"
         options: *simplicity_scale
 
       - name: omission_faithfulness
         label: "Faithfulness to Original"
-        question: "How much information was lost or changed?"
+        question: "Was the original meaning preserved?"
         options: *meaning_distortion_options
+      
+      - name: comment
+        label: "Comment"
+        question: "Leave any comments here (Type NA if none):"
+        options: textarea
 
 # --------------------------
   - name: insertion
@@ -218,18 +230,21 @@ edits:
     color: green
     icon: fa-flask
     annotation:
-      - name: insertion_vocab_simplicity
-        question: "Does it remove or replace hard words with simpler ones?"
+      - name: insertion-category
+        label: "Edit Category"
+        question: "What aspect does this change affect the most?"
+        options: *edit_categories
+      
+      - name: insertion-simplicity
+        label: "Simplicity"
+        question: "How does the change affect the sentence's readability and simplicity?"
         options: *simplicity_scale
-      - name: insertion_syntax_simplicity
-        question: "Does it simplify the sentence structure?"
-        options: *simplicity_scale
-      - name: insertion_organization_simplicity
-        question: "Does it improve the flow or logical structure of the sentence?"
-        options: *simplicity_scale
-      - name: insertion_style_simplicity
-        question: "Does it make the tone sound more natural or conversational?"
-        options: *simplicity_scale
+
+      - name: insertion_faithfulness
+        label: "Faithfulness to Original"
+        question: "Was the original meaning preserved?"
+        options: *meaning_distortion_options
+      
       - name: new_info_added
         label: "New Information"
         question: "Does it introduce genuinely new information not stated or implied anywhere in the original?"
@@ -240,6 +255,11 @@ edits:
             label: "Yes"
             question: "What type of new information was added?"
             options: *info_addition_types
+      
+      - name: comment
+        label: "Comment"
+        question: "Leave any comments here (Type NA if none): "
+        options: textarea
 
 # --------------------------
   - name: substitution
@@ -250,24 +270,21 @@ edits:
     color: blue
     icon: fa-sort
     annotation:
-      - name: substitution_vocab_simplicity
-        question: "Does it remove or replace hard words with simpler ones?"
-        options: *simplicity_scale
-      - name: substitution_syntax_simplicity
-        question: "Does it simplify the sentence structure?"
-        options: *simplicity_scale
-      - name: substitution_organization_simplicity
-        question: "Does it improve the flow or logical structure of the sentence?"
-        options: *simplicity_scale
-      - name: substitution_style_simplicity
-        question: "Does it make the tone sound more natural or conversational?"
-        options: *simplicity_scale
+      - name: substitution-category
+        label: "Edit Category"
+        question: "What aspect does this change affect the most?"
+        options: *edit_categories
       
+      - name: substitution-simplicity
+        label: "Simplicity"
+        question: "How did the change affect the sentence's readability and simplicity?"
+        options: *simplicity_scale
+
       - name: substitution_faithfulness
         label: "Faithfulness to Original"
-        question: "How much information was lost or changed?"
+        question: "Was the original meaning preserved?"
         options: *meaning_distortion_options
-
+      
       - name: new_info_added
         label: "New Information"
         question: "Does it introduce genuinely new information not stated or implied anywhere in the original?"
@@ -278,6 +295,11 @@ edits:
             label: "Yes"
             question: "What type of new information was added?"
             options: *info_addition_types
+      
+      - name: comment
+        label: "Comment"
+        question: "Leave any comments here (Type NA if none):"
+        options: textarea
 
 # --------------------------
   - name: structure
@@ -287,34 +309,33 @@ edits:
     color: orange
     icon: fa-align-justify
     annotation:
-    - name: structure_vocab_simplicity
-      question: "Did this edit simplify the vocabulary (e.g., removing complex, rare, or abstract words)?"
-      options: *simplicity_scale
+      - name: structure-category
+        label: "Edit Category"
+        question: "What aspect does this change affect the most?"
+        options: *edit_categories
+      
+      - name: structure-simplicity
+        label: "Simplicity"
+        question: "How did the change affect the sentence's readability and simplicity?"
+        options: *simplicity_scale
+      
+      - name: structure_faithfulness
+        label: "Faithfulness to Original"
+        question: "Was the original meaning preserved?"
+        options: *meaning_distortion_options
 
-    - name: structure_syntax_simplicity
-      question: "Did this edit simplify the sentence structure (e.g., shorter sentence, fewer clauses)?"
-      options: *simplicity_scale
-
-    - name: structure_organization_simplicity
-      question: "Did this edit improve the flow or logical structure of the sentence?"
-      options: *simplicity_scale
-
-    - name: structure_style_simplicity
-      question: "Did this edit make the tone or style more direct, conversational, or accessible?"
-      options: *simplicity_scale
-
-    - name: structure_faithfulness
-      label: "Faithfulness to Original"
-      question: "How much information was lost or changed due to this edit?"
-      options: *meaning_distortion_options
-
-    - name: new_info_added
-      label: "New Information"
-      question: "Does this edit introduce genuinely new information not stated or implied anywhere in the original?"
-      options:
-        - name: no_new_info
-          label: "No"
-        - name: new_info_present
-          label: "Yes"
-          question: "What type of new information was added?"
-          options: *info_addition_types
+      - name: new_info_added
+        label: "New Information"
+        question: "Does this edit introduce genuinely new information not stated or implied anywhere in the original?"
+        options:
+          - name: no_new_info
+            label: "No"
+          - name: new_info_present
+            label: "Yes"
+            question: "What type of new information was added?"
+            options: *info_addition_types
+      
+      - name: comment
+        label: "Comment"
+        question: "Leave any comments here (Type NA if none):"
+        options: textarea

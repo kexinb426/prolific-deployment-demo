@@ -11,7 +11,7 @@ database:
     url: https://meta-eval-pilot.firebaseio.com/
     collection: thresh     # (default: thresh) The database to use, this must exist on the firestore
     document: annotations   # (default: annotation) The document to use, this must exist on the firestore
-    field: annotation_set_1  # The document field to store annotations, we recommend changing this value between data collection runs
+    field: pilot_1_news  # The document field to store annotations, we recommend changing this value between data collection runs
 
 # --------------------------------
 instructions: |

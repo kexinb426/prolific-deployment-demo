@@ -188,7 +188,7 @@ edits:
           - name: disjointed
             label: "Disjointed"
           - name: illogical
-            label: "Illogical・Incorrect"
+            label: "Illogical"
           - name: incorrect
             label: "Incorrect"
           - name: other

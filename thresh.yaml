@@ -14,6 +14,17 @@ database:
     field: annotation_set_1  # The document field to store annotations, we recommend changing this value between data collection runs
 
 # --------------------------------
+instructions: |
+  
+  You can see the tutorial [here] (https://docs.google.com/document/d/11Jd-O6SO96pH_tKoesYt3qy-T8ABvjfMgkzpMZ8CmVY/edit?usp=sharing).
+
+  Please make sure you select all the edits, some edits **may be easily missed** when the sentence is too long.
+  
+  If you have any question, encounter any bug or have any suggestion in general, please don't hesitate to reach out to us.
+  
+  Have fun!!!
+
+# --------------------------------
 template_name: demo
 template_label: Crowdsourcing Demo
 

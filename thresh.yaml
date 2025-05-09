@@ -23,6 +23,7 @@ font_size:
 
 interface_text:
   typology:
+    context_label: ""
     source_label: "Original"
     target_label: "Simplification"
 
@@ -35,14 +36,14 @@ display:
 
 # Simplicity effectiveness options
 simplicity_scale: &simplicity_scale
-  - name: harder
-    label: "Harder"
+  - name: much-easier
+    label: "Significantly Improve"
+  - name: easier
+    label: "Improve"
   - name: ineffective
     label: "No Real Difference"
-  - name: easier
-    label: "Easier"
-  - name: much-easier
-    label: "Significantly Easier"
+  - name: harder
+    label: "More Difficult"
 
 
 
@@ -123,11 +124,11 @@ info_addition_types: &info_addition_types
 # info distortion options
 meaning_distortion_options: &meaning_distortion_options
   - name: preserved
-    label: "Preserved"
+    label: "Fully Preserved"
   - name: partial
-    label: "Partially Preserved"
+    label: "Partially Modified"
   - name: changed
-    label: "Meaning Changed"
+    label: "Significantly Changed"
 
 
 # Reusable edit category options
@@ -171,7 +172,7 @@ edits:
           - name: disjointed
             label: "Disjointed"
           - name: illogical
-            label: "Illogical"
+            label: "Illogical・Incorrect"
           - name: incorrect
             label: "Incorrect"
           - name: other
@@ -304,6 +305,7 @@ edits:
 # --------------------------
   - name: structure
     label: "Structure"
+    enable_input: true
     enable_output: true
     type: multi_span
     color: orange
